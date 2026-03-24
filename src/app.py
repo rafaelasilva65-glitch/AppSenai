@@ -1,6 +1,7 @@
 from datetime import date
 import flet
-from flet import ThemeMode, Text, TextField, OutlinedButton, Column, CrossAxisAlignment, Number
+from flet import ThemeMode, Text, TextField, OutlinedButton, Column, CrossAxisAlignment, Number, Container, Colors, \
+    FontWeight
 from flet.controls.border_radius import horizontal
 
 
@@ -21,9 +22,9 @@ def main(page: flet.Page):
         try:
             numero = int(input_numero.value)
             tipo = "par" if numero % 2 == 0 else "impar"
-            text1.value = f"O número {numero} é {tipo}"
+            text_parimpar.value = f"O número {numero} é {tipo}"
         except ValueError:
-            text1.value = "Por favor, digite um número valido"
+            text_parimpar.value = "Por favor, digite um número valido"
         page.update()
 
     def verficar_idade():
@@ -32,11 +33,11 @@ def main(page: flet.Page):
             hoje = date.today().year
             idade = hoje - ano
             if idade < 18:
-                text2.value = f'Você tem {idade} anos, é menor de idade'
+                text_idade.value = f'Você tem {idade} anos, é menor de idade'
             elif idade == 18 or idade > 18:
-                text2.value = f'Você tem {idade} anos, é maior de idade'
+                text_idade.value = f'Você tem {idade} anos, é maior de idade'
         except ValueError:
-            text.value = "Por favor, digite seu ano de nascimento"
+            text_idade.value = "Por favor, digite seu ano de nascimento"
         page.update()
 
 
@@ -45,17 +46,17 @@ def main(page: flet.Page):
 
     # Componentes
     text = Text()
-    text1 = Text()
-    text2 = Text()
+    text_parimpar = Text()
+    text_idade = Text()
     input_nome = TextField(label="Nome")
     input_sobrenome = TextField(label="Sobrenome")
     input_numero = TextField(label="Número")
-    input_ano = TextField(label="Ano")
+    input_ano = TextField(label="DD/MM/AAAA")
 
 
     btn_salvar = OutlinedButton("Salvar", on_click=salvar_nome)
-    btn_salvar1 = OutlinedButton("Salvar numero", on_click=salvar_numero)
-    btn_salvar2 = OutlinedButton("Verificar idade", on_click=verficar_idade)
+    btn_salvar1 = OutlinedButton("Verificar par ou impar", on_click=salvar_numero)
+    btn_salvar2 = OutlinedButton("Calcular idade", on_click=verficar_idade)
 
 
     # Construção da tela
@@ -63,18 +64,54 @@ def main(page: flet.Page):
     page.add(
          Column(
              [
-                 input_nome,
-                 input_sobrenome,
-                 btn_salvar,
-                 text,
+                 Container(
+                     Column(
+                         [
+                             Text("Atividade 1", weight=FontWeight.BOLD, size=24),
+                             input_nome,
+                             input_sobrenome,
+                             btn_salvar,
+                             text,
+                         ],
+                         horizontal_alignment=CrossAxisAlignment.CENTER,
+                     ),
+                     bgcolor=Colors.BLUE_800,
+                     padding=15,
+                     border_radius=10,
+                     width=400,
+                 ),
 
-                 input_numero,
-                 btn_salvar1,
-                 text1,
+                Container(
+                    Column(
+                        [
+                            Text("Atividade 2", weight=FontWeight.BOLD, size=24),
+                            input_numero,
+                            btn_salvar1,
+                            text_parimpar,
+                        ],
+                        horizontal_alignment=CrossAxisAlignment.CENTER,
+                    ),
+                    bgcolor=Colors.RED_800,
+                    padding=15,
+                    border_radius=10,
+                    width=400,
+                ),
 
-                 input_ano,
-                 btn_salvar2,
-                 text2
+                Container(
+                    Column(
+                        [
+                            Text("Atividade 3", weight=FontWeight.BOLD, size=24),
+                            input_ano,
+                            btn_salvar2,
+                            text_idade
+                        ],
+                        horizontal_alignment=CrossAxisAlignment.CENTER,
+                    ),
+                    bgcolor=Colors.GREEN_800,
+                    padding=15,
+                    border_radius=10,
+                    width=400,
+                ),
              ],
              width=400,
              horizontal_alignment=CrossAxisAlignment.CENTER
@@ -82,4 +119,4 @@ def main(page: flet.Page):
     )
 
 
-flet.app(main)
+flet.run(main)
