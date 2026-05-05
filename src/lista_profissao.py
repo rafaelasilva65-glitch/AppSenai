@@ -3,6 +3,11 @@ import flet
 from flet import ThemeMode, View, Colors, Button, Text, TextField, FloatingActionButton, Icons, \
     ListView, Icon, ListTile, PopupMenuButton, PopupMenuItem, Dropdown, dropdown
 
+class Pessoa:
+    def __init__(self, nome, profissao):
+        self.nome = nome
+        self.profissao = profissao
+        self.genero = None
 
 def main(page: flet.Page):
     # configurações
