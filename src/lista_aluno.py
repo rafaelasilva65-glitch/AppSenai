@@ -7,6 +7,9 @@ from flet import ThemeMode, View, Colors, Button, Text, TextField, FloatingActio
 class Pessoa:
     def __init__(self, nome, idade, data_nascimento, ano_atual, genero):
         self.nome = nome
+        self.idade = idade
+        self.data_nascimento = data_nascimento
+        self.ano_atual = ano_atual
         self.genero = None
 
 def main(page: flet.Page):
@@ -21,11 +24,12 @@ def main(page: flet.Page):
     def navegar(route):
         asyncio.create_task(page.push_route(route))
 
-    def ver_detalhes():
-        text_nome.value = input_nome.value
-        text_idade.value = input_idade.value
-        text_data_nascimento.value = input_data_nascimento.value
-        text_ano_atual.value = input_ano_atual.value
+    def ver_detalhes(pessoa):
+        text_nome.value = pessoa.nome
+        text_idade.value = pessoa.idade
+        text_data_nascimento.value = pessoa.data_nascimento
+        text_ano_atual.value = pessoa.ano_atual
+        text_genero.value = pessoa.genero
 
         tem_erro = False
         if input_nome.value:
@@ -79,13 +83,14 @@ def main(page: flet.Page):
                     trailing=PopupMenuButton(
                         icon=Icons.MORE_VERT,
                         items=[
-                            PopupMenuItem("ver detalhes", icon=Icons.REMOVE_RED_EYE, on_click=lambda ver_detalhes:  navegar("/ver_detalhes")),
+                            PopupMenuItem("ver detalhes", icon=Icons.REMOVE_RED_EYE, on_click=lambda _, pessoa=item: ver_detalhes(pessoa)),
                             PopupMenuItem("Excluir", icon=Icons.DELETE, on_click=lambda _, i=item: excluir(i)),
                         ]
                     )
                 )
             )
         page.update()
+
 
     def excluir(item):
         lista_dados.remove(item)
@@ -167,6 +172,11 @@ def main(page: flet.Page):
                     flet.AppBar(
                         title="Exibir nome",
                     ),
+                    text_nome,
+                    text_idade,
+                    text_data_nascimento,
+                    text_ano_atual,
+                    text_genero,
                     Row([
                         Icon(Icons.DRIVE_FILE_RENAME_OUTLINE, color=Colors.PRIMARY, size=20),
                         text_nome

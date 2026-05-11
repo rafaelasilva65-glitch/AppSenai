@@ -4,6 +4,10 @@ from flet import ThemeMode, View, Colors, Button, FloatingActionButton, Icons, T
     Row, Icon, ListTile, PopupMenuButton, PopupMenuItem
 
 
+class Pessoa:
+    def __init__(self, nome):
+        self.nome = nome
+
 def main(page: flet.Page):
     # Configurações
     page.title = "Exemplo de lista"
@@ -57,12 +61,16 @@ def main(page: flet.Page):
                     trailing=PopupMenuButton(
                         icon=Icons.MORE_VERT,
                         items=[
-                            PopupMenuItem("Ver detalhes", icon=Icons.REMOVE_RED_EYE),
+                            PopupMenuItem("Ver detalhes", icon=Icons.REMOVE_RED_EYE,  on_click=lambda _, pessoa=item: ver_detalhes(pessoa)),
                             PopupMenuItem("Excluir", icon=Icons.DELETE, on_click=lambda: excluir(item)),
                         ]
                     ),
                 )
             )
+
+
+    def ver_detalhes(pessoa):
+        text_nome.value = pessoa.nome
 
     def excluir(item):
         lista_dados.remove(item)
@@ -72,11 +80,12 @@ def main(page: flet.Page):
         nome = input_nome.value.strip()
 
         if nome:
-            lista_dados.append(nome)
-            input_nome.error = None
-            input_nome.value = ""
-        else:
-            input_nome.error = "Campo obrigatorio"
+            lista_dados.append({
+                "nome": nome,
+            })
+
+        input_nome.value = ""
+        if not nome: input_nome.error_text = "campo obrigatório"
 
         montar_lista_texto()
         montar_lista_card()
@@ -171,6 +180,7 @@ def main(page: flet.Page):
             await page.push_route(top_view.route)
 
     # Componentes
+    text_nome = Text()
     input_nome = TextField(label="Nome", hint_text="Digite seu nome", on_submit=salvar_dados)
 
     btn_salvar = Button("Salvar", width=400, on_click=lambda: salvar_dados())
